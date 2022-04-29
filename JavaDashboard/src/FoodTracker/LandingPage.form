@@ -101,7 +101,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="DeleteMealButton">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Delete Meal"/>
+            <Property name="text" type="java.lang.String" value="Delete/View Meal"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="DeleteMealButtonActionPerformed"/>
@@ -118,7 +118,6 @@
         <Component class="javax.swing.JButton" name="GenerateListButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Generate Shopping List"/>
-            <Property name="actionCommand" type="java.lang.String" value="Generate Shopping List"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="GenerateListButtonActionPerformed"/>

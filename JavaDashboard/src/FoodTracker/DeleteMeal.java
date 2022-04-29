@@ -5,12 +5,25 @@
  */
 package FoodTracker;
 
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import oracle.jdbc.OraclePreparedStatement;
+import oracle.jdbc.OracleResultSet;
+
 /**
  *
  * @author donta
  */
 public class DeleteMeal extends javax.swing.JFrame {
 
+    Connection conn = null;
+    OraclePreparedStatement pst = null;
+    OracleResultSet rs = null;
+ 
+      
+    
+    
     /**
      * Creates new form DeleteMeal
      */
@@ -28,30 +41,199 @@ public class DeleteMeal extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Delete a Meal!");
+
+        jButton1.setText("View Meals");
+        jButton1.setActionCommand("View Meals");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Index", "Day", "MealType", "RecipeName"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        jButton2.setText("Delete Selected Row");
+        jButton2.setActionCommand("");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Back to Start!");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(170, 170, 170)
-                .addComponent(jLabel1)
-                .addContainerGap(161, Short.MAX_VALUE))
+                .addGap(30, 30, 30)
+                .addComponent(jButton1)
+                .addGap(175, 175, 175)
+                .addComponent(jButton3)
+                .addContainerGap(75, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(170, 170, 170)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(182, 182, 182)
+                                .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(275, Short.MAX_VALUE))
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "Select * FROM MEAL";
+                                  
+             DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            model.setRowCount(0);
+            
+            rs = (OracleResultSet) pst.executeQuery();
+            int index = 0;
+            while(rs.next()){
+                index = index + 1;
+                model.addRow(new Object[]{index, rs.getString("DAY"), rs.getString("MEALTYPE"),rs.getString("RECIPENAME")});
+            }
+          
+          
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         if(jTable1.getSelectedRow() != -1) 
+            {
+                 int row = jTable1.getSelectedRow();
+                 System.out.println(row + "yo");
+                String day  = jTable1.getModel().getValueAt(row, 1).toString();
+                String meal  = jTable1.getModel().getValueAt(row, 2).toString();
+                String recipe  = jTable1.getModel().getValueAt(row, 3).toString();
+                
+               // remove the selected row from the table model
+               DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+               model.removeRow(jTable1.getSelectedRow());
+               JOptionPane.showMessageDialog(null, "Deleted successfully");
+               
+                
+               
+               
+                System.out.println(day + " " + meal + " " + recipe);
+               
+                  conn = ConnectDb.setupConnection();
+        try
+        {
+            String sqlStatement = "DELETE FROM MEAL WHERE DAY = ? AND MEALTYPE = ? AND RECIPENAME = ?";
+                                  
+         
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            pst.setString(1, day);
+            pst.setString(2, meal);
+            pst.setString(3, recipe);
+            
+            rs = (OracleResultSet) pst.executeQuery();
+            
+          
+            System.out.println("A Meal was deleted");
+           
+          
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        finally
+        {
+            ConnectDb.close(rs);
+            ConnectDb.close(pst);
+            ConnectDb.close(conn);
+        }
+               
+               
+               
+               
+               
+               
+            }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+        new LandingPage().setVisible(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -89,6 +271,11 @@ public class DeleteMeal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

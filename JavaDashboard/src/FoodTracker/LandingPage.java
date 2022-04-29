@@ -28,7 +28,7 @@ public class LandingPage extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        DeleteMealButton.setText("Delete Meal");
+        DeleteMealButton.setText("Delete/View Meal");
         DeleteMealButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DeleteMealButtonActionPerformed(evt);
@@ -43,7 +43,6 @@ public class LandingPage extends javax.swing.JFrame {
         });
 
         GenerateListButton.setText("Generate Shopping List");
-        GenerateListButton.setActionCommand("Generate Shopping List");
         GenerateListButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GenerateListButtonActionPerformed(evt);
@@ -141,7 +140,8 @@ public class LandingPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DeleteMealButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMealButtonActionPerformed
-        // TODO add your handling code here:
+         this.setVisible(false);
+        new DeleteMeal().setVisible(true);
     }//GEN-LAST:event_DeleteMealButtonActionPerformed
 
     private void SearchRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchRecipeButtonActionPerformed
@@ -149,7 +149,8 @@ public class LandingPage extends javax.swing.JFrame {
     }//GEN-LAST:event_SearchRecipeButtonActionPerformed
 
     private void AddMealButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMealButtonActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        new AddMeal().setVisible(true);
     }//GEN-LAST:event_AddMealButtonActionPerformed
 
     private void GenerateListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateListButtonActionPerformed
