@@ -158,11 +158,13 @@ public class LandingPage extends javax.swing.JFrame {
     }//GEN-LAST:event_GenerateListButtonActionPerformed
 
     private void AddFridgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddFridgeButtonActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        new AddFridge().setVisible(true);
     }//GEN-LAST:event_AddFridgeButtonActionPerformed
 
     private void RemoveFridgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveFridgeButtonActionPerformed
-        // TODO add your handling code here:
+       this.setVisible(false);
+       new DeleteFridge().setVisible(true);
     }//GEN-LAST:event_RemoveFridgeButtonActionPerformed
 
     /**
