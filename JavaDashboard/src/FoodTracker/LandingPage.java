@@ -1,6 +1,5 @@
 package FoodTracker;
 import java.sql.Connection;
-import javax.swing.JOptionPane;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 
@@ -140,12 +139,13 @@ public class LandingPage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DeleteMealButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteMealButtonActionPerformed
-         this.setVisible(false);
+        this.setVisible(false);
         new DeleteMeal().setVisible(true);
     }//GEN-LAST:event_DeleteMealButtonActionPerformed
 
     private void SearchRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchRecipeButtonActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        new SearchRecipe().setVisible(true);
     }//GEN-LAST:event_SearchRecipeButtonActionPerformed
 
     private void AddMealButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMealButtonActionPerformed
