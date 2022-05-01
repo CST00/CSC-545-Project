@@ -52,7 +52,6 @@ public class DeleteMeal extends javax.swing.JFrame {
         jLabel1.setText("Delete a Meal!");
 
         jButton1.setText("View Meals");
-        jButton1.setActionCommand("View Meals");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
