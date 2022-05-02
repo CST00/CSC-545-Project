@@ -155,7 +155,7 @@ public class LandingPage extends javax.swing.JFrame {
 
     private void GenerateListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateListButtonActionPerformed
         this.setVisible(false);
-        new GenerateListWeekForm().setVisible(true);
+        new ShowList().setVisible(true);
     }//GEN-LAST:event_GenerateListButtonActionPerformed
 
     private void AddFridgeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddFridgeButtonActionPerformed

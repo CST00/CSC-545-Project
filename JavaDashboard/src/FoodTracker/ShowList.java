@@ -4,11 +4,20 @@
  */
 package FoodTracker;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import oracle.jdbc.OraclePreparedStatement;
+import oracle.jdbc.OracleResultSet;
+
 /**
  *
  * @author Josiah
  */
 public class ShowList extends javax.swing.JFrame {
+    Connection conn = null;
+    OraclePreparedStatement pst = null;
+    OracleResultSet rs = null;
 
     /**
      * Creates new form ShowList
@@ -31,6 +40,7 @@ public class ShowList extends javax.swing.JFrame {
         GroceryList = new javax.swing.JList<>();
         GroceryListLabel = new javax.swing.JLabel();
         GroceryListOkButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -43,10 +53,17 @@ public class ShowList extends javax.swing.JFrame {
 
         GroceryListLabel.setText("Grocery List");
 
-        GroceryListOkButton.setText("OK");
+        GroceryListOkButton.setText("Done");
         GroceryListOkButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GroceryListOkButtonActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Generate List");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -62,10 +79,14 @@ public class ShowList extends javax.swing.JFrame {
                 .addContainerGap(56, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(61, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(GroceryListOkButton)
-                .addGap(163, 163, 163))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(106, 106, 106)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(140, 140, 140)
+                .addComponent(GroceryListOkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -73,10 +94,12 @@ public class ShowList extends javax.swing.JFrame {
                 .addGap(4, 4, 4)
                 .addComponent(GroceryListLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(GroceryListOkButton)
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -84,11 +107,44 @@ public class ShowList extends javax.swing.JFrame {
 
     private void GroceryListOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GroceryListOkButtonActionPerformed
         this.setVisible(false);
+        new LandingPage().setVisible(true);
     }//GEN-LAST:event_GroceryListOkButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.out.println("hello world");
+        setGroceryList();
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     
-    public void setGroceryList(String[] s) {
-        GroceryList.setListData(s);
+    public void setGroceryList() {
+       
+        conn = ConnectDb.setupConnection();
+        try {
+            ArrayList list = new ArrayList();
+            String sqlStatement = "select ingredientname " +
+                                   "from stock where " +
+                                    "instock = 'false' " +
+                                    "and ingredientname in " +
+                                    "(select ingredientname from needs where recipename in " +
+                                    "(select recipename from meal))";
+            pst = (OraclePreparedStatement) conn.prepareStatement(sqlStatement);
+            rs = (OracleResultSet) pst.executeQuery();
+            
+            while (rs.next()) {
+                list.add(rs.getString("ingredientname"));
+            }
+            int listSize = list.size();
+            String[] ingList = new String[list.size()];
+            for (int i = 0; i < listSize; i++) {
+                ingList[i] = list.get(i).toString();
+            }
+            
+           GroceryList.setListData(ingList);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
     /**
      * @param args the command line arguments
@@ -129,6 +185,7 @@ public class ShowList extends javax.swing.JFrame {
     private javax.swing.JList<String> GroceryList;
     private javax.swing.JLabel GroceryListLabel;
     private javax.swing.JButton GroceryListOkButton;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
